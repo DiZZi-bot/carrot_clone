@@ -5,7 +5,7 @@ interface FormInputProps {
   name: string;
   placeholder: string;
   required: boolean;
-  errors: string[];
+  errors?: string[];
 }
 
 export default function FormInput({
@@ -13,7 +13,7 @@ export default function FormInput({
   name,
   placeholder,
   required,
-  errors,
+  errors = [],
 }: FormInputProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -35,28 +35,8 @@ export default function FormInput({
           required={required}
         />
       </div>
-      {errors[0] === "valid" && (
-        <div className="flex justify-center items-center p-2 rounded-lg text-center font-medium text-green-500 bg-green-500/20">
-          <svg
-            data-slot="icon"
-            fill="none"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            className="size-6 mr-1.5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <span>{errors[1]}</span>
-        </div>
-      )}
-      {errors[0] === "invalid" && (
+
+      {errors.map((error, index) => (
         <div className="flex justify-center items-center p-2 rounded-lg text-center font-medium text-red-500 bg-red-500/20">
           <svg
             data-slot="icon"
@@ -74,9 +54,9 @@ export default function FormInput({
               d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
-          <span>{errors[1]}</span>
+          <span>{error}</span>
         </div>
-      )}
+      ))}
     </div>
   );
 }
