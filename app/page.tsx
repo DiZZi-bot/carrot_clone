@@ -4,18 +4,18 @@ import FormButton from "@/components/form-btn";
 import FormInput from "@/components/form-input";
 import { LockIcon } from "@/components/hero-icons";
 import { useActionState } from "react";
-import { validateAccount } from "../lib/actions";
+import { validateAccount } from "./actions";
 
 export default function Home() {
   const [state, formAction] = useActionState(validateAccount, null);
 
   return (
-    <div className="w-full h-screen bg-gray-900 items-center flex justify-center">
-      <div className="bg-slate-700 rounded-2xl w-[600px] p-10 space-y-4">
+    <div className="flex h-screen w-full items-center justify-center bg-gray-900">
+      <div className="w-[600px] space-y-4 rounded-2xl bg-slate-700 p-10">
         <form action={formAction} className="grid gap-4">
           <div className="mb-6 flex items-center justify-center">
-            <LockIcon className="mr-4 size-8 text-blue-400 font-bold" />
-            <p className="text-white/90 font-extrabold text-3xl">
+            <LockIcon className="mr-4 size-8 font-bold text-blue-400" />
+            <p className="text-3xl font-extrabold text-white/90">
               Account Validation
             </p>
           </div>
@@ -24,26 +24,26 @@ export default function Home() {
             name="email"
             placeholder="Email"
             required
-            errors={state?.fieldErrors.email}
+            errors={state?.error?.fieldErrors.email}
           />
           <FormInput
             type="username"
             name="username"
             placeholder="Username"
             required
-            errors={state?.fieldErrors.username}
+            errors={state?.error?.fieldErrors.username}
           />
           <FormInput
             type="password"
             name="password"
             placeholder="Password"
             required
-            errors={state?.fieldErrors.password}
+            errors={state?.error?.fieldErrors.password}
           />
           <FormButton text="Log in" />
         </form>
-        {state === undefined && (
-          <div className="flex justify-center items-center p-4 rounded-2xl text-center font-medium text-green-500 bg-green-500/20">
+        {state?.isSuccess && (
+          <div className="flex items-center justify-center rounded-2xl bg-green-500/20 p-4 text-center font-medium text-green-500">
             <svg
               data-slot="icon"
               fill="none"
@@ -52,7 +52,7 @@ export default function Home() {
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              className="size-6 mr-1.5"
+              className="mr-1.5 size-6"
             >
               <path
                 strokeLinecap="round"
