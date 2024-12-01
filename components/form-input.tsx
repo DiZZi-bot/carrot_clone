@@ -19,16 +19,16 @@ export default function FormInput({
     <div className="flex flex-col gap-2">
       <div className="relative flex items-center">
         {type === "email" && (
-          <EmailIcon className="absolute left-3 text-gray-400 size-6" />
+          <EmailIcon className="absolute left-3 size-6 text-gray-400" />
         )}
         {type === "password" && (
-          <KeyIcon className="absolute left-3 text-gray-400 size-6" />
+          <KeyIcon className="absolute left-3 size-6 text-gray-400" />
         )}
         {type === "username" && (
-          <UserIcon className="absolute left-3 text-gray-400 size-6" />
+          <UserIcon className="absolute left-3 size-6 text-gray-400" />
         )}
         <input
-          className="form-input w-full"
+          className="w-full rounded-xl border-none bg-white/10 p-3 pl-12 text-white/90 placeholder:text-gray-400 focus:border-none focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
           type={type}
           name={name}
           placeholder={placeholder}
@@ -37,7 +37,7 @@ export default function FormInput({
       </div>
 
       {errors.map((error, index) => (
-        <div className="flex justify-center items-center p-2 rounded-lg text-center font-medium text-red-500 bg-red-500/20">
+        <div className="flex items-center justify-center rounded-lg bg-red-500/20 p-2 text-center font-medium text-red-500">
           <svg
             data-slot="icon"
             fill="none"
@@ -46,7 +46,7 @@ export default function FormInput({
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
-            className="size-6 mr-1.5"
+            className="mr-1.5 size-6"
           >
             <path
               strokeLinecap="round"

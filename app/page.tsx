@@ -1,68 +1,23 @@
-"use client";
-
-import FormButton from "@/components/form-btn";
-import FormInput from "@/components/form-input";
-import { LockIcon } from "@/components/hero-icons";
-import { useActionState } from "react";
-import { validateAccount } from "./actions";
+import Link from "next/link";
 
 export default function Home() {
-  const [state, formAction] = useActionState(validateAccount, null);
-
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-900">
-      <div className="w-[600px] space-y-4 rounded-2xl bg-slate-700 p-10">
-        <form action={formAction} className="grid gap-4">
-          <div className="mb-6 flex items-center justify-center">
-            <LockIcon className="mr-4 size-8 font-bold text-blue-400" />
-            <p className="text-3xl font-extrabold text-white/90">
-              Account Validation
-            </p>
-          </div>
-          <FormInput
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-            errors={state?.error?.fieldErrors.email}
-          />
-          <FormInput
-            type="username"
-            name="username"
-            placeholder="Username"
-            required
-            errors={state?.error?.fieldErrors.username}
-          />
-          <FormInput
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            errors={state?.error?.fieldErrors.password}
-          />
-          <FormButton text="Log in" />
-        </form>
-        {state?.isSuccess && (
-          <div className="flex items-center justify-center rounded-2xl bg-green-500/20 p-4 text-center font-medium text-green-500">
-            <svg
-              data-slot="icon"
-              fill="none"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              className="mr-1.5 size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-            <span>Welcome back!</span>
-          </div>
-        )}
+    <div className="flex min-h-screen flex-col items-center justify-between p-6">
+      <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
+        <span className="text-9xl">🥕</span>
+        <h1 className="text-4xl">당근</h1>
+        <h2 className="text-2xl">당근 마겟에 어서오세요!</h2>
+      </div>
+      <div className="flex w-full flex-col items-center gap-3">
+        <Link href="/create-account" className="primary-btn py-2.5 text-lg">
+          시작하기
+        </Link>
+        <div className="flex gap-2">
+          <span>이미 계정이 있나요?</span>
+          <Link href="/login" className="hover:underline">
+            로그인
+          </Link>
+        </div>
       </div>
     </div>
   );

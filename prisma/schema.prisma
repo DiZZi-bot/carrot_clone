@@ -1,13 +1,15 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id         Int      @id @default(autoincrement())
-  username   String
+  username   String   @unique
   password   String
   email      String   @unique
   bio        String?
@@ -16,6 +18,7 @@ model User {
   tweets     Tweet[]
   likes      Like[]
 }
+
 model Tweet {
   id         Int      @id @default(autoincrement())
   tweet      String
@@ -26,6 +29,7 @@ model Tweet {
   likes  Like[]
   @@index([userId])
 }
+
 model Like {
   created_at DateTime @default(now())
   tweet      Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
