@@ -1,10 +1,8 @@
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
-import FormButton from "@/components/form-btn";
-1;
 
-async function getUser() {
+export async function GetUser() {
   const session = await getSession();
   if (session.id) {
     const user = await db.user.findUnique({
@@ -20,7 +18,7 @@ async function getUser() {
 }
 
 export default async function Profile() {
-  const user = await getUser();
+  const user = await GetUser();
   const logOut = async () => {
     "use server";
     const session = await getSession();

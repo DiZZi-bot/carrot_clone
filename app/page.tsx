@@ -1,23 +1,27 @@
+import TweetList from "@/components/tweet-list";
+import { getInitialTweets } from "./service/tweet-service";
 import Link from "next/link";
+import { GetUser } from "./profile/page";
 
-export default function Home() {
+export default async function Home() {
+  const user = await GetUser();
+  const tweets = await getInitialTweets();
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-6">
-      <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
-        <span className="text-9xl">🥕</span>
-        <h1 className="text-4xl">당근</h1>
-        <h2 className="text-2xl">당근 마겟에 어서오세요!</h2>
-      </div>
-      <div className="flex w-full flex-col items-center gap-3">
-        <Link href="/create-account" className="primary-btn py-2.5 text-lg">
-          시작하기
-        </Link>
-        <div className="flex gap-2">
-          <span>이미 계정이 있나요?</span>
-          <Link href="/login" className="hover:underline">
-            로그인
-          </Link>
+    <div className="flex h-screen w-full items-start justify-center gap-4 bg-gray-900 p-10 text-white">
+      <div className="w-[200px] rounded-2xl bg-slate-700 p-5">
+        <div className="flex items-center justify-center gap-4">
+          <div className="h-24 w-24 rounded-full bg-slate-300"></div>
+          <div className="text-2xl">{user.username}</div>
         </div>
+        <Link href="/make-tweet-dev">
+          <div className="mt-4 text-center text-blue-400 underline hover:text-blue-600">
+            (dev)make tweet
+          </div>
+        </Link>
+      </div>
+
+      <div className="h-1/2 w-[600px] rounded-2xl bg-slate-700">
+        <TweetList initialTweets={tweets} />
       </div>
     </div>
   );

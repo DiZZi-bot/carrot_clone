@@ -100,7 +100,7 @@ interface FormState {
       email: string;
       username: string;
       password: string;
-      comfirm_password: string;
+      confirm_password: string;
     },
     string
   > | null;
@@ -138,6 +138,6 @@ export async function handleCreateAccountForm(
     const session = await getSession();
     session.id = user.id;
     await session.save();
-    redirect("/profile");
+    redirect("/");
   }
 }

@@ -15,11 +15,11 @@ export async function middleware(request: NextRequest) {
   const isPublicUrlExist = publicOnlyUrls[request.nextUrl.pathname];
   if (!session.id) {
     if (!isPublicUrlExist) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/log-in", request.url));
     }
   } else {
     if (isPublicUrlExist) {
-      return NextResponse.redirect(new URL("/products", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 }
