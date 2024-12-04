@@ -47,8 +47,8 @@ export default function TweetList({
   };
 
   return (
-    <div className="relative h-full">
-      <div className="flex flex-col gap-12 p-10">
+    <div className="relative h-full w-full bg-slate-700">
+      <div className="flex flex-col gap-12 p-8">
         {tweets.map((tweet) => (
           <ListTweet key={tweet.id} {...tweet} />
         ))}
