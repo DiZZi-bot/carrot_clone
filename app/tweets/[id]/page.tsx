@@ -1,15 +1,28 @@
 import { notFound } from "next/navigation";
-import db from "@/lib/db";
 import MenuBar from "@/components/menu-bar";
-import { formatToTimeAgo } from "@/lib/utils";
 import DetailTweet from "@/components/detail-tweet";
+import Responses from "@/components/responses";
+import { formatToTimeAgo } from "@/lib/utils";
+import { unstable_cache as nextCache } from "next/cache";
+import { getTweetDetail } from "@/app/service/tweet-service";
+import { getLikeStatus } from "@/app/service/like-service";
+import { getInitialResponse } from "@/app/service/response-service";
+import getSession from "@/lib/session";
 
-async function getTweet(id: number) {
-  const tweet = await db.tweet.findUnique({
-    where: { id },
-    include: { user: { select: { username: true } } },
+async function getCachedLikeStatus(tweetId: number) {
+  const userId = (await getSession()).id;
+  console.log(`Cached userId: ${userId}`);
+  const cachedLikeStatus = nextCache(getLikeStatus, ["tweet-like-status"], {
+    tags: [`like-status-${tweetId}`],
   });
-  return tweet;
+  return cachedLikeStatus(tweetId, userId!);
+}
+
+async function getCachedResponses(tweetId: number) {
+  const cachedResponses = nextCache(getInitialResponse, ["tweet-responses"], {
+    tags: [`tweet-responses-${tweetId}`],
+  });
+  return cachedResponses(tweetId);
 }
 
 export default async function TweetDetail({
@@ -23,11 +36,20 @@ export default async function TweetDetail({
   if (isNaN(id)) {
     return notFound();
   }
-  const tweet = await getTweet(id);
-  console.log(tweet);
+  const tweet = await getTweetDetail(id);
+  const { responses, responseCount } = await getCachedResponses(id);
   if (!tweet) {
     return notFound();
   }
+  const { isLiked, likeCount } = await getCachedLikeStatus(id);
+  console.log(tweet);
+  console.log(responses);
+  console.log(`isLiked: ${isLiked}`);
+  console.log(`likeCount: ${likeCount}`);
+  const resultResponse = {
+    responses: responses,
+    responseCount: responseCount,
+  };
 
   return (
     <div className="flex h-screen w-full items-start justify-center gap-3 bg-gray-900 text-white">
@@ -41,9 +63,17 @@ export default async function TweetDetail({
             <DetailTweet
               username={tweet.user?.username}
               tweet={tweet.tweet}
+              tweetId={tweet.id}
               created_at={formatToTimeAgo(tweet.created_at.toString())}
+              isLiked={isLiked}
+              likeCount={likeCount}
+              responseCount={responseCount}
             />
-            <div className="text-center">(dev)Reply Area</div>
+            <Responses
+              initialResponses={resultResponse}
+              tweetId={id}
+              username={tweet.user.username}
+            />
           </div>
         </div>
       </div>

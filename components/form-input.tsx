@@ -37,7 +37,10 @@ export default function FormInput({
       </div>
 
       {errors.map((error, index) => (
-        <div className="flex items-center justify-center rounded-lg bg-red-500/20 p-2 text-center font-medium text-red-500">
+        <div
+          key={index}
+          className="flex items-center justify-center rounded-lg bg-red-500/20 p-2 text-center font-medium text-red-500"
+        >
           <svg
             data-slot="icon"
             fill="none"

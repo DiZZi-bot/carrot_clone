@@ -9,24 +9,26 @@ import {
   GetMoreTweets,
   GetTweetTotalCount,
 } from "@/app/service/tweet-service";
-import {} from "@/app/service/tweet-service";
 
 export default function TweetList({
   initialTweets,
+  userId,
 }: {
   initialTweets: InitialTweets;
+  userId: number;
 }) {
   const [tweets, setTweets] = useState(initialTweets);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
 
-  const loadTweets = async (newPage: number) => {
+  const loadTweets = async (newPage: number, userId: number) => {
     setIsLoading(true);
     try {
-      const fetchedTweets = await GetMoreTweets(newPage);
+      const fetchedTweets = await GetMoreTweets(newPage, userId);
       console.log(`fetchedTweets: ${fetchedTweets}`);
-      setTweets(fetchedTweets);
+      setTweets((prevTweets) => [...prevTweets, ...fetchedTweets]);
+
       const totalTweetCount = await GetTweetTotalCount();
       console.log(`totalTweetCount: ${totalTweetCount}`);
       const totalPages = Math.ceil(
@@ -43,7 +45,7 @@ export default function TweetList({
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || isLoading || newPage === page) return;
     setPage(newPage);
-    loadTweets(newPage);
+    loadTweets(newPage, userId);
   };
 
   return (

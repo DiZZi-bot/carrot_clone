@@ -5,32 +5,7 @@ import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { typeToFlattenedError, z } from "zod";
 import getSession from "@/lib/session";
-
-const checkEmailExists = async (email: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      email,
-    },
-    select: {
-      id: true,
-    },
-  });
-  return Boolean(user);
-};
-
-const loginAccountSchema = z.object({
-  email: z
-    .string({
-      required_error: "Email is required.",
-    })
-    .trim()
-    .email("Please enter a valid email address.")
-    .toLowerCase()
-    .refine(checkEmailExists, "An account with this email does not exist."),
-  password: z.string({
-    required_error: "Password is required.",
-  }),
-});
+import { loginAccountSchema } from "@/lib/zodSchema";
 
 interface FormState {
   isSuccess: boolean;

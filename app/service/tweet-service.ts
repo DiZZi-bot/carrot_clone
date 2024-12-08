@@ -2,50 +2,63 @@
 
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { TWEET_NUMBER_FOR_PAGENATION, TWEET_MAX_LENGTH } from "@/lib/constants";
+import { TWEET_NUMBER_FOR_PAGENATION } from "@/lib/constants";
 import { z, typeToFlattenedError } from "zod";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
+import { createTweetSchema } from "@/lib/zodSchema";
 
 export async function getInitialTweets() {
   const tweets = await db.tweet.findMany({
-    include: { user: true },
+    include: {
+      user: true,
+      _count: {
+        select: { Response: true, likes: true },
+      },
+    },
     take: TWEET_NUMBER_FOR_PAGENATION,
     orderBy: {
       created_at: "desc",
     },
   });
-  return tweets;
+  return tweets.map((tweet) => ({
+    ...tweet,
+    likeCount: tweet._count.likes,
+    responseCount: tweet._count.Response,
+    isLiked: false,
+  }));
 }
 export type InitialTweets = Prisma.PromiseReturnType<typeof getInitialTweets>;
 
-export async function GetMoreTweets(page: number) {
+export async function GetMoreTweets(page: number, userId: number) {
   const tweets = await db.tweet.findMany({
-    include: { user: true },
+    include: {
+      user: true,
+      _count: {
+        select: { Response: true, likes: true },
+      },
+      likes: {
+        where: { userId },
+        select: { userId: true },
+      },
+    },
     skip: TWEET_NUMBER_FOR_PAGENATION * (page - 1),
     take: TWEET_NUMBER_FOR_PAGENATION,
     orderBy: {
       created_at: "desc",
     },
   });
-  return tweets;
+  return tweets.map((tweet) => ({
+    ...tweet,
+    likeCount: tweet._count.likes,
+    responseCount: tweet._count.Response,
+    isLiked: false,
+  }));
 }
 
 export async function GetTweetTotalCount() {
   return db.tweet.count();
 }
-
-const createTweetSchema = z.object({
-  tweet: z
-    .string({
-      required_error: "Tweet cannot be empty.",
-    })
-    .trim()
-    .max(
-      TWEET_MAX_LENGTH,
-      `Tweet cannot exceed ${TWEET_MAX_LENGTH} characters.`,
-    ),
-});
 
 interface FormState {
   isSuccess: boolean;
@@ -108,4 +121,15 @@ export async function handleCreateTweet(
       redirect(`/tweets/${newTweet.id}`);
     }
   }
+}
+
+export async function getTweetDetail(id: number) {
+  const tweet = await db.tweet.findUnique({
+    where: { id },
+    include: {
+      user: { select: { username: true } },
+      _count: { select: { Response: true } },
+    },
+  });
+  return tweet;
 }
