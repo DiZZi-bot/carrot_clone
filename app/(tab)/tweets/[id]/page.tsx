@@ -39,7 +39,6 @@ export default async function TweetDetail({
   if (!tweet) {
     return notFound();
   }
-  const { isLiked, likeCount } = await getCachedLikeStatus(tweetId);
   const resultResponse = {
     responses: responses,
     responseCount: responseCount,

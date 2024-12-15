@@ -3,7 +3,7 @@
 import bcrypt from "bcrypt";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
-import { typeToFlattenedError, z } from "zod";
+import { typeToFlattenedError } from "zod";
 import getSession from "@/lib/session";
 import { profileSchema } from "@/lib/zodSchema";
 import { checkCurrentPassword } from "@/app/service/profile-edit-service";

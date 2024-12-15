@@ -10,7 +10,6 @@ import { TWEET_MAX_LENGTH } from "@/lib/constants";
 
 export default function AddTweetForm() {
   const [state, formAction] = useActionState(handleCreateTweet, null);
-  const { pending } = useFormStatus();
   const [tweetText, setTweetText] = useState("");
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
