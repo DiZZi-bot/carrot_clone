@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { unstable_cache as nextCache } from "next/cache";
-import { getLikeStatus } from "@/app/service/like-service";
 import { getInitialResponse } from "@/app/service/response-service";
 import getSession from "@/lib/session";
 import TweetDetailContainer from "@/components/window-components/tweet-detail-container";
