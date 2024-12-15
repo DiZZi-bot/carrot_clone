@@ -1,4 +1,4 @@
-import { typeToFlattenedError, z } from "zod";
+import { z } from "zod";
 import {
   USERNAME_MIN_LENGTH,
   USERNAME_MAX_LENGTH,
@@ -7,8 +7,16 @@ import {
   PASSWORD_REGEX_ERROR,
   TWEET_MAX_LENGTH,
   RESPONSE_MAX_LENGTH,
+  KEYWORD_MIN_LENGTH,
+  KEYWORD_MAX_LENGTH,
+  BIO_MAX_LENGTH,
 } from "@/lib/constants";
 import db from "@/lib/db";
+import {
+  checkUniqueEmail,
+  checkUniqueUsername,
+} from "@/app/service/profile-edit-service";
+import getSession from "./session";
 
 const checkPasswords = ({
   password,
@@ -144,3 +152,78 @@ export const creatResponseSchema = z.object({
       `Response cannot exceed ${RESPONSE_MAX_LENGTH} characters.`,
     ),
 });
+
+export const keywordSchema = z
+  .string({
+    required_error: "Search word is required.",
+  })
+  .trim()
+  .min(
+    KEYWORD_MIN_LENGTH,
+    `Searcg word should be at least ${KEYWORD_MIN_LENGTH} characters long.`,
+  )
+  .max(
+    KEYWORD_MAX_LENGTH,
+    `Searcg word should be at least ${KEYWORD_MAX_LENGTH} characters long.`,
+  );
+
+export const profileSchema = z
+  .object({
+    email: z
+      .string({ required_error: "Email is required." })
+      .trim()
+      .email("Please enter a valid email address."),
+    username: z
+      .string({ required_error: "Username is required." })
+      .trim()
+      .min(
+        USERNAME_MIN_LENGTH,
+        `Username should be at least ${USERNAME_MIN_LENGTH} characters long.`,
+      )
+      .max(
+        USERNAME_MAX_LENGTH,
+        `Username should be at most ${USERNAME_MAX_LENGTH} characters long.`,
+      ),
+    password: z.string({ required_error: "Password is required." }),
+    newPassword: z
+      .string()
+      .min(
+        PASSWORD_MIN_LENGTH,
+        `Password should be at least ${PASSWORD_MIN_LENGTH} characters long.`,
+      )
+      .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+    bio: z
+      .string()
+      .trim()
+      .optional()
+      .refine((value) => !value || value.length <= BIO_MAX_LENGTH, {
+        message: `Bio must be ${BIO_MAX_LENGTH} characters or less.`,
+      }),
+  })
+  .superRefine(async (data, ctx) => {
+    const session = await getSession();
+    const isEmailAvailable = await checkUniqueEmail(data.email, session.id);
+    if (!isEmailAvailable) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This email is already in use.",
+        path: ["email"],
+        fatal: true,
+      });
+    }
+  })
+  .superRefine(async (data, ctx) => {
+    const session = await getSession();
+    const isEmailAvailable = await checkUniqueUsername(
+      data.username,
+      session.id,
+    );
+    if (!isEmailAvailable) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This username is already in use.",
+        path: ["username"],
+        fatal: true,
+      });
+    }
+  });

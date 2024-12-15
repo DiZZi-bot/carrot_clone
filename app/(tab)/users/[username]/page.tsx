@@ -1,4 +1,4 @@
-import { GetUser, GetUserDetail, LogOut } from "@/app/service/user-service";
+import { GetUserDetail, LogOut } from "@/app/service/user-service";
 import { UserCircleIcon as ProfileIcon } from "@heroicons/react/24/outline";
 import { ChatBubbleBottomCenterIcon as TweetIcon } from "@heroicons/react/24/outline";
 import { ChatBubbleLeftRightIcon as ResponseIcon } from "@heroicons/react/24/outline";
@@ -11,12 +11,17 @@ export default async function Profile({
 }: {
   params: { username: string };
 }) {
-  const username = params.username;
+  const { username } = await params;
+  console.log(`page.tsx - username: ${username}`);
 
+  const userDetail = await GetUserDetail({ username: username });
+
+  if (!userDetail) {
+    return notFound();
+  }
   if (!username) {
     return notFound();
   }
-  const userDetail = await GetUserDetail({ username: username });
 
   return (
     <div className="flex w-full flex-col gap-3">

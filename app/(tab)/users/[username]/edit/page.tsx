@@ -1,15 +1,27 @@
-import { GetUserDetail } from "@/app/service/user-service";
-import { redirect } from "next/navigation";
+import {
+  GetUserDetail,
+  getUserProfileInformation,
+} from "@/app/service/user-service";
+import EditProfileForm from "@/components/form-components/edit-profile-form";
+import { notFound } from "next/navigation";
 
 export default async function EditProfile({
   params,
 }: {
   params: { username: string };
 }) {
-  const username = params.username;
-  const userDetail = await GetUserDetail({ username: username });
-  if (!userDetail.isMyProfile) {
-    redirect("/");
+  const { username } = await params;
+
+  const paramUser = await GetUserDetail({ username: username });
+  const sessionUser = await getUserProfileInformation();
+
+  if (sessionUser.id !== paramUser.id) {
+    notFound();
   }
-  return <div>Edit Profile Page!</div>;
+
+  return (
+    <div className="flex w-full flex-col gap-8 bg-background">
+      <EditProfileForm initialUserInformation={sessionUser} />
+    </div>
+  );
 }

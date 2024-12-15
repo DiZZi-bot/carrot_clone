@@ -12,7 +12,7 @@ export default function Home() {
   const [state, formAction] = useActionState(handleCreateAccountForm, null);
 
   return (
-    <div className="mt-36 flex h-screen w-full bg-background">
+    <div className="mt-36 flex w-full bg-background">
       <div className="w-[600px] space-y-4 rounded-2xl">
         <form action={formAction} className="grid gap-4">
           <FormTitle text="Create Account" />

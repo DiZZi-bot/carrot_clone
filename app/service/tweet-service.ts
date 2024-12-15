@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/lib/db";
-import { z, typeToFlattenedError } from "zod";
+import { typeToFlattenedError } from "zod";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
 import { createTweetSchema } from "@/lib/zodSchema";
