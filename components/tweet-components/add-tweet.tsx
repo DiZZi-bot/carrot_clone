@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { handleCreateTweet } from "@/app/service/tweet-service";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";

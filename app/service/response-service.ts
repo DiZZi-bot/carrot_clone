@@ -85,7 +85,7 @@ export async function handleCreateResponse(
       isSuccess: true,
       error: null,
     };
-  } catch (error) {
+  } catch {
     return {
       isSuccess: false,
       error: {

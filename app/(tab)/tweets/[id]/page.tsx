@@ -7,14 +7,6 @@ import TweetDetailContainer from "@/components/window-components/tweet-detail-co
 import AddResponse from "@/components/response-components/add-response";
 import { getTweetById } from "@/app/service/tweet-service";
 
-async function getCachedLikeStatus(tweetId: number) {
-  const userId = (await getSession()).id;
-  const cachedLikeStatus = nextCache(getLikeStatus, ["tweet-like-status"], {
-    tags: [`like-status-${tweetId}`],
-  });
-  return cachedLikeStatus(tweetId, userId!);
-}
-
 async function getCachedResponses(tweetId: number) {
   const cachedResponses = nextCache(getInitialResponse, ["tweet-responses"], {
     tags: [`tweet-responses-${tweetId}`],

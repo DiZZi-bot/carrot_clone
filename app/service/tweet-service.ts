@@ -53,7 +53,7 @@ export async function handleCreateTweet(
       isSuccess: true,
       error: null,
     };
-  } catch (error) {
+  } catch {
     return {
       isSuccess: false,
       error: {

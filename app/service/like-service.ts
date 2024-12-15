@@ -45,8 +45,8 @@ export async function unlikeTweet(tweetId: number) {
     });
     console.log("unlike!");
     revalidateTag(`like-status-${tweetId}`);
-  } catch (e) {
-    console.log(e);
+  } catch {
+    console.log("Like Service Error!");
   }
 }
 
@@ -75,7 +75,7 @@ export async function unlikeTweetForList(tweetId: number) {
     });
     console.log(`unLike!-Id : ${session.id}`);
     revalidateTag(`tweet-status-${session.id}`);
-  } catch (e) {
-    console.log(e);
+  } catch {
+    console.log("Like Service Error!");
   }
 }
