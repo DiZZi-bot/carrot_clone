@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 export default async function EditProfile({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
 

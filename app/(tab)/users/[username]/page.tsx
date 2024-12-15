@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 export default async function Profile({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
   console.log(`page.tsx - username: ${username}`);

@@ -16,7 +16,7 @@ async function getCachedResponses(tweetId: number) {
 export default async function TweetDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const tweetParams = await params;
   const tweetId = Number(tweetParams.id);
