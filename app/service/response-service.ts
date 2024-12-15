@@ -46,7 +46,7 @@ export async function handleCreateResponse(
   formData: FormData,
 ): Promise<FormState> {
   const tweetId = Number(formData.get("tweetId"));
-
+  console.log(`handleCreateResponse-getTweetId: ${tweetId}`);
   const session = await getSession();
 
   if (!session?.id) {
@@ -86,7 +86,6 @@ export async function handleCreateResponse(
       error: null,
     };
   } catch (error) {
-    console.error("Error creating tweet:", error);
     return {
       isSuccess: false,
       error: {

@@ -1,6 +1,7 @@
 import { typeToFlattenedError, z } from "zod";
 import {
   USERNAME_MIN_LENGTH,
+  USERNAME_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
@@ -38,6 +39,10 @@ export const createAccountSchema = z
       .min(
         USERNAME_MIN_LENGTH,
         `Username should be at least ${USERNAME_MIN_LENGTH} characters long.`,
+      )
+      .max(
+        USERNAME_MAX_LENGTH,
+        `Username should be at most ${USERNAME_MAX_LENGTH} characters long.`,
       ),
     password: z
       .string({

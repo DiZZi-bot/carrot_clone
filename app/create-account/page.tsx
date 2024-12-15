@@ -1,25 +1,21 @@
 "use client";
 
-import FormButton from "@/components/form-btn";
-import FormInput from "@/components/form-input";
-import { LockIcon } from "@/components/hero-icons";
+import FormButton from "@/components/form-components/form-button";
+import FormInput from "@/components/form-components/form-input";
+import FormTitle from "@/components/form-components/form-title";
+import FormSuccess from "@/components/form-components/form-success";
+import Formlink from "@/components/form-components/form-link";
 import { useActionState } from "react";
 import { handleCreateAccountForm } from "./action";
-import Link from "next/link";
 
 export default function Home() {
   const [state, formAction] = useActionState(handleCreateAccountForm, null);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-900">
-      <div className="w-[600px] space-y-4 rounded-2xl bg-slate-700 p-10">
+    <div className="mt-36 flex h-screen w-full bg-background">
+      <div className="w-[600px] space-y-4 rounded-2xl">
         <form action={formAction} className="grid gap-4">
-          <div className="mb-6 flex items-center justify-center">
-            <LockIcon className="mr-4 size-8 font-bold text-blue-400" />
-            <p className="text-3xl font-extrabold text-white/90">
-              Create Account
-            </p>
-          </div>
+          <FormTitle text="Create Account" />
           <FormInput
             type="email"
             name="email"
@@ -50,36 +46,12 @@ export default function Home() {
           />
           <FormButton text="Create Account" />
         </form>
-        {state?.isSuccess && (
-          <div className="flex items-center justify-center rounded-2xl bg-green-500/20 p-4 text-center font-medium text-green-500">
-            <svg
-              data-slot="icon"
-              fill="none"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              className="mr-1.5 size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-            <span>Create Success!</span>
-          </div>
-        )}
-        <div>
-          <span className="text-white">Already have an account? </span>
-          <Link
-            className="text-blue-400 underline hover:text-blue-600"
-            href="/log-in"
-          >
-            Sign in
-          </Link>
-        </div>
+        {state?.isSuccess && <FormSuccess text="Create Success!" />}
+        <Formlink
+          href="/log-in"
+          basicText="Already have an account?"
+          linkText="Log In"
+        />
       </div>
     </div>
   );

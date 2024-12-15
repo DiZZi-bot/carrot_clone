@@ -1,7 +1,7 @@
 import { formatToTimeAgo } from "@/lib/utils";
 import { User } from "@prisma/client";
 import LikeButton from "./like-button";
-import ReplyButton from "./reply-button";
+import ResponseButton from "./response-button";
 import Link from "next/link";
 
 interface ListTweetProps {
@@ -40,7 +40,7 @@ export default function ListTweet({
         </div>
       </Link>
       <div className="flex items-center justify-start gap-5 pl-20 text-sm">
-        <ReplyButton responseCount={responseCount} tweetId={id} />
+        <ResponseButton responseCount={responseCount} tweetId={id} />
         <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={id} />
       </div>
     </div>

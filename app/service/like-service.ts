@@ -21,7 +21,6 @@ export async function getLikeStatus(userId: number, tweetId: number) {
 }
 
 export async function likeTweet(tweetId: number) {
-  console.log("like?");
   const session = await getSession();
   await db.like.create({
     data: {
@@ -46,5 +45,33 @@ export async function unlikeTweet(tweetId: number) {
     });
     console.log("unlike!");
     revalidateTag(`like-status-${tweetId}`);
+  } catch (e) {}
+}
+
+export async function likeTweetForList(tweetId: number) {
+  const session = await getSession();
+  await db.like.create({
+    data: {
+      tweetId,
+      userId: session.id!,
+    },
+  });
+  console.log(`like!-Id : ${session.id}`);
+  revalidateTag(`tweet-status-${session.id}`);
+}
+
+export async function unlikeTweetForList(tweetId: number) {
+  try {
+    const session = await getSession();
+    await db.like.delete({
+      where: {
+        id: {
+          tweetId,
+          userId: session.id!,
+        },
+      },
+    });
+    console.log(`unLike!-Id : ${session.id}`);
+    revalidateTag(`tweet-status-${session.id}`);
   } catch (e) {}
 }

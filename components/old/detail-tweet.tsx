@@ -1,5 +1,5 @@
 import LikeButton from "./like-button";
-import ReplyButton from "./reply-button";
+import ResponseButton from "./response-button";
 import Link from "next/link";
 
 interface DetailTweetProps {
@@ -36,7 +36,7 @@ export default function DetailTweet({
         </div>
       </Link>
       <div className="flex items-center justify-start gap-5 pl-20 text-sm">
-        <ReplyButton responseCount={responseCount} tweetId={tweetId} />
+        <ResponseButton responseCount={responseCount} tweetId={tweetId} />
         <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={tweetId} />
       </div>
     </div>
